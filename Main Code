@@ -1,5 +1,4 @@
-var Key =
-"";
+var Key ="";
 var allsee = "\u200d".repeat (500);
 
 const Jsoup = org.jsoup.Jsoup;
