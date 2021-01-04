@@ -12,6 +12,7 @@ var Master = ["",
 "[관리자]_힘슘찐",
 "[관리자]_힘슘찐",
 "[관리자]_헐렁봉디",
+"[관리자]_K1ngZico ",
 "[서포터]_RasCal중중",
 "에티선생",
 "김건우",
@@ -56,40 +57,43 @@ if (msg.startsWith(".매치 ")) {
      + "\n게임 닉네임: " + data3 ["name"]
      + "\n레벨: " + data3 ["level"]);
 */
-    replier.reply (JSON.parse (userId)["accessId"]);
+    //replier.reply (JSON.parse (userId)["accessId"]);
     
     let matchData = Jsoup.connect (
     "https://api.nexon.co.kr/kart/v1.0/users/"
     + JSON.parse (userId)["accessId"] +
     "/matches?start_date=&end_date=&offset=&limit=1&match_types=")
     .header ("Authorization", Key).ignoreContentType(true).get().text();
-    
+
+/*
     replier.reply (JSON.parse (matchData)["nickName"]
     
     + "\n" + JSON.parse (matchData).matches[0].matches[0].matchId
     //뭐든지 배열이면 [0]
     );
-    
+*/
     let Final = Jsoup.connect(
     "https://api.nexon.co.kr/kart/v1.0/matches/"
     + JSON.parse (matchData).matches[0].matches[0].matchId)
     .header ("Authorization", Key).ignoreContentType(true).get().text();
     
+    if (JSON.parse (Final).teams[0].teamId == 1 ) {
+      
+      } else {
     replier.reply (
-    JSON.parse (Final)["matchType"]
-    + "\n" + JSON.parse (Final)["startTime"]
-    + "\n" + JSON.parse (Final)["players"].length
-    + "\n" + JSON.parse (Final).players[0].characterName
+    + "\n시작시간: " + JSON.parse (Final)["startTime"]
+    + "\n플레이어 수: " + JSON.parse (Final)["players"].length
     );
     var a = [];
     for (i=0; i<JSON.parse (Final)["players"].length; i++) {
       
       a.push (JSON.parse (Final).players[i].characterName);
-      replier.reply (JSON.parse (Final).players[i].characterName);
+      //replier.reply (JSON.parse (Final).players[i].characterName);
     }
-    replier.reply (a);
+    replier.reply (a.join ("\n"));
     a = [];
     replier.reply (a);
+    }
         
   } catch (e1) {
     replier.reply (e1);
