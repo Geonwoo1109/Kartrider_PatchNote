@@ -1,4 +1,5 @@
-var Key ="";
+
+var Key = "";
 var allsee = "\u200d".repeat (500);
 
 const Jsoup = org.jsoup.Jsoup;
@@ -12,7 +13,7 @@ var Master = ["",
 "[관리자]_힘슘찐",
 "[관리자]_힘슘찐",
 "[관리자]_헐렁봉디",
-"[관리자]_K1ngZico ",
+"[관리자]_K1ngZico",
 "[서포터]_RasCal중중",
 "에티선생",
 "김건우",
@@ -46,7 +47,7 @@ if (msg.startsWith(".유저 ")) {
   }
 
 if (msg.startsWith(".매치 ")) {
-  try {
+  
     let userId = Jsoup.connect ("https://api.nexon.co.kr/kart/v1.0/users/nickname/" + msg.substr(4))
     .header ("Authorization", Key).data ("nickname", msg.substr (4))
     .ignoreContentType(true).get().text();
@@ -72,31 +73,43 @@ if (msg.startsWith(".매치 ")) {
     //뭐든지 배열이면 [0]
     );
 */
+
+    
+    try {
     let Final = Jsoup.connect(
     "https://api.nexon.co.kr/kart/v1.0/matches/"
     + JSON.parse (matchData).matches[0].matches[0].matchId)
     .header ("Authorization", Key).ignoreContentType(true).get().text();
     
-    if (JSON.parse (Final).teams[0].teamId == 1 ) {
-      
-      } else {
-    replier.reply (
-    + "\n시작시간: " + JSON.parse (Final)["startTime"]
-    + "\n플레이어 수: " + JSON.parse (Final)["players"].length
-    );
     var a = [];
     for (i=0; i<JSON.parse (Final)["players"].length; i++) {
       
       a.push (JSON.parse (Final).players[i].characterName);
       //replier.reply (JSON.parse (Final).players[i].characterName);
     }
-    replier.reply (a.join ("\n"));
+    replier.reply ("[개인전] 참여선수목록\n\n" + a.join ("\n"));
     a = [];
     replier.reply (a);
-    }
+    
         
   } catch (e1) {
-    replier.reply (e1);
+    let Final = Jsoup.connect(
+    "https://api.nexon.co.kr/kart/v1.0/matches/"
+    + JSON.parse (matchData).matches[0].matches[0].matchId)
+    .header ("Authorization", Key).ignoreContentType(true).get().text();
+    
+    a = [];
+    for (i=0; i<JSON.parse (Final).teams[0].players.length; i++) {
+      a.push (JSON.parse (Final).teams[0].players[i].characterName);
+      //replier.reply (JSON.parse (Final).players[i].characterName);
+    }
+    a.push ("vs");
+    for (i=0; i<JSON.parse (Final).teams[0].players.length; i++) {
+      a.push (JSON.parse (Final).teams[1].players[i].characterName);
+      //replier.reply (JSON.parse (Final).players[i].characterName);
+    }
+    replier.reply ("[팀전] 참여선수목록\n\n" + a.join ("\n"));
+    a = [];
   }
 }
   
