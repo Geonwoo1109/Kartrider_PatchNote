@@ -1,4 +1,3 @@
-
 var Key = "";
 var allsee = "\u200d".repeat (500);
 
@@ -48,9 +47,11 @@ if (msg.startsWith(".유저 ")) {
 
 if (msg.startsWith(".매치 ")) {
   
+  try {
     let userId = Jsoup.connect ("https://api.nexon.co.kr/kart/v1.0/users/nickname/" + msg.substr(4))
     .header ("Authorization", Key).data ("nickname", msg.substr (4))
     .ignoreContentType(true).get().text();
+
 //    replier.reply (data3);
 /*
      replier.reply (
@@ -111,6 +112,12 @@ if (msg.startsWith(".매치 ")) {
     replier.reply ("[팀전] 참여선수목록\n\n" + a.join ("\n"));
     a = [];
   }
+
+  } catch (e) {
+    replier.reply ("기록이 존재하지 않습니다.");
+  }
+
+
 }
   
   
