@@ -1,32 +1,53 @@
-var Key = "";
+
+var Key =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiOTkwNDM3MjIxIiwiYXV0aF9pZCI6IjQiLCJ0b2tlbl90eXBlIjoiQWNjZXNzVG9rZW4iLCJzZXJ2aWNlX2lkIjoiNDMwMDExMzkzIiwiWC1BcHAtUmF0ZS1MaW1pdCI6IjIwMDAwOjEwIiwibmJmIjoxNjA4MzkxODMyLCJleHAiOjE2NzE0NjM4MzIsImlhdCI6MTYwODM5MTgzMn0.qxByvfxvxjxf213RwwmYh046kOvDncQYOPfPxlWnngE";
 var allsee = "\u200d".repeat (500);
 
 const Jsoup = org.jsoup.Jsoup;
+const Fs = FileStream;
+var NewMaster = [];
 var Master = ["",
 "[관리자]_에티선생",
-"[관리자]_루돌프혜원",
-"[관리자]_만렙모험가",
-"[관리자]_인썸김여신",
+"[관리자]_인썸김기리",
+"[관리자]_인썸김비서",
 "[관리자]_Hyewonnn",
 "[관리자]_MerryZico",
-"[관리자]_힘슘찐",
-"[관리자]_힘슘찐",
-"[관리자]_헐렁봉디",
+"[관리자]_컵랴면",
 "[관리자]_K1ngZico",
-"[서포터]_RasCal중중",
+"[서포터]_라스칼길모중",
 "에티선생",
 "김건우",
-"LEG건우 / 17남 / 편집남코딩남"];
+"LEG건우 / 18남 / 편집¤코딩"];
 
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
-  if (room == "(PC)카트라이더 유저들의 모임🔊" && sender == "방장봇") {
-    // replier.reply ("환영합니다~ 카트라이더 닉네임이신가요?");
-  }
-  
 
-     if ((room == "(PC)카트라이더 유저들의 모임🔊" && Master.includes (sender)) || room != "(PC)카트라이더 유저들의 모임🔊") {
-       
-       
+
+try {
+
+if (msg.startsWith(".관리자위임 ")) {
+  NewMaster = Fs.read ("/sdcard/카유모/관리자목록").slice ("*");
+  
+  if (NewMaster.includes (sender) || sender == "김건우") {
+  replier.reply ("["+msg.substr (7)+"] 님을 관리자 목록에 추가합니다.");
+  Fs.append ("/sdcard/카유모/관리자목록", msg.substr (7) + "*");
+  }
+}
+if (msg == ".관리자초기화" && sender == "김건우") {
+  Fs.write ("/sdcard/카유모/관리자목록", "[관리자]_에티선생*");
+}
+} catch (e) {
+  replier.reply (e);
+}
+if (msg == ".봇") replier.reply ("닉네임 확인봇에 관한 정보입니다" + allsee
+  +"\n\n\n[설명]"+"\n카트라이더 유저의 닉네임과 가장 최근의 매치기록을 알려주는 봇입니다. 이 외에도 다양한 기능이 있습니다."
+  +"\n\n[명령어 목록]" + "\n.유저 닉네임 ex).유저 에티선생\n.매치 닉네임 ex).매치 에티선생\n.관리자위임 카톡닉네임 ex).관리자위임 [관리자]_에티선생"
+  +"\n\n[봇 사용 가능자]\n" +
+  Fs.read ("/sdcard/카유모/관리자목록").split("*").join ("\n")
+  +"\n\n[직접 사용해보고싶다면?]" + "\n제 오픈프로필을 눌러 개인적으로 사용해보실 수 있습니다.");
+if ((room == "(PC)카트라이더 유저들의 모임🔊" && Master.includes (sender))
+  || room != "(PC)카트라이더 유저들의 모임🔊") {
+
+
 if (msg.startsWith(".유저 ")) {
      try {
      User = msg.substr(4);
@@ -45,36 +66,20 @@ if (msg.startsWith(".유저 ")) {
    }
   }
 
+//매치데이터
+
 if (msg.startsWith(".매치 ")) {
   
   try {
     let userId = Jsoup.connect ("https://api.nexon.co.kr/kart/v1.0/users/nickname/" + msg.substr(4))
     .header ("Authorization", Key).data ("nickname", msg.substr (4))
     .ignoreContentType(true).get().text();
-
-//    replier.reply (data3);
-/*
-     replier.reply (
-     "유저 고유 Id: " + data3 ["accessId"]
-     + "\n게임 닉네임: " + data3 ["name"]
-     + "\n레벨: " + data3 ["level"]);
-*/
-    //replier.reply (JSON.parse (userId)["accessId"]);
     
     let matchData = Jsoup.connect (
     "https://api.nexon.co.kr/kart/v1.0/users/"
     + JSON.parse (userId)["accessId"] +
     "/matches?start_date=&end_date=&offset=&limit=1&match_types=")
     .header ("Authorization", Key).ignoreContentType(true).get().text();
-
-/*
-    replier.reply (JSON.parse (matchData)["nickName"]
-    
-    + "\n" + JSON.parse (matchData).matches[0].matches[0].matchId
-    //뭐든지 배열이면 [0]
-    );
-*/
-
     
     try {
     let Final = Jsoup.connect(
@@ -92,7 +97,6 @@ if (msg.startsWith(".매치 ")) {
     a = [];
     replier.reply (a);
     
-        
   } catch (e1) {
     let Final = Jsoup.connect(
     "https://api.nexon.co.kr/kart/v1.0/matches/"
@@ -102,15 +106,15 @@ if (msg.startsWith(".매치 ")) {
     a = [];
     for (i=0; i<JSON.parse (Final).teams[0].players.length; i++) {
       a.push (JSON.parse (Final).teams[0].players[i].characterName);
-      //replier.reply (JSON.parse (Final).players[i].characterName);
     }
     a.push ("vs");
+    
     for (i=0; i<JSON.parse (Final).teams[0].players.length; i++) {
       a.push (JSON.parse (Final).teams[1].players[i].characterName);
-      //replier.reply (JSON.parse (Final).players[i].characterName);
     }
     replier.reply ("[팀전] 참여선수목록\n\n" + a.join ("\n"));
     a = [];
+    
   }
 
   } catch (e) {
