@@ -1,6 +1,5 @@
 
-var Key =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiOTkwNDM3MjIxIiwiYXV0aF9pZCI6IjQiLCJ0b2tlbl90eXBlIjoiQWNjZXNzVG9rZW4iLCJzZXJ2aWNlX2lkIjoiNDMwMDExMzkzIiwiWC1BcHAtUmF0ZS1MaW1pdCI6IjIwMDAwOjEwIiwibmJmIjoxNjA4MzkxODMyLCJleHAiOjE2NzE0NjM4MzIsImlhdCI6MTYwODM5MTgzMn0.qxByvfxvxjxf213RwwmYh046kOvDncQYOPfPxlWnngE";
+var Key ="Key";
 var allsee = "\u200d".repeat (500);
 
 const Jsoup = org.jsoup.Jsoup;
@@ -44,7 +43,8 @@ if (msg == ".봇") replier.reply ("닉네임 확인봇에 관한 정보입니다
   +"\n\n[봇 사용 가능자]\n" +
   Fs.read ("/sdcard/카유모/관리자목록").split("*").join ("\n")
   +"\n\n[직접 사용해보고싶다면?]" + "\n제 오픈프로필을 눌러 개인적으로 사용해보실 수 있습니다.");
-if ((room == "(PC)카트라이더 유저들의 모임🔊" && Master.includes (sender))
+  NewMaster = Fs.read ("/sdcard/카유모/관리자목록").slice ("*");
+if ((room == "(PC)카트라이더 유저들의 모임🔊" && NewMaster.includes (sender))
   || room != "(PC)카트라이더 유저들의 모임🔊") {
 
 
