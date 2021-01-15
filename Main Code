@@ -5,18 +5,6 @@ var allsee = "\u200d".repeat (500);
 const Jsoup = org.jsoup.Jsoup;
 const Fs = FileStream;
 var NewMaster = [];
-var Master = ["",
-"[관리자]_에티선생",
-"[관리자]_인썸김기리",
-"[관리자]_인썸김비서",
-"[관리자]_Hyewonnn",
-"[관리자]_MerryZico",
-"[관리자]_컵랴면",
-"[관리자]_K1ngZico",
-"[서포터]_라스칼길모중",
-"에티선생",
-"김건우",
-"LEG건우 / 18남 / 편집¤코딩"];
 
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
 
