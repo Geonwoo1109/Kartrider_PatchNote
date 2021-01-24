@@ -1,41 +1,57 @@
-
-var Key = "";
+var Key ="";
 var allsee = "\u200d".repeat (500);
 
 const Jsoup = org.jsoup.Jsoup;
 const Fs = FileStream;
-var NewMaster = [];
+var NewMaster = [
+"[관리자]_에티선생",
+"[관리자]_인썸김기리",
+"[관리자]_인썸김비서",
+"[관리자]_중중이애오",
+"[관리자]_Hyewonnn",
+"[관리자]_K1ngZico",
+"[서포터]_에쀀"];
 
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
+  /*12시 알림*/
+  if (room == "카톡봇 테스트방" && sender == "방장봇" && msg == "12시") {
+    replier.reply("(PC)카트라이더 유저들의 모임🔊","점심시간이네요! 다들 점심먹고 게임하세요~");
+    replier.reply("(PC)카트라이더 유저들의 모임🔊",
+    "닉네임봇 참여코드는 [0000404]입니다!\n참여코드는 도배방지를 위함이니 양해바랍니다~");
+  }
+  if (room == "(PC)카트라이더 유저들의 모임🔊" && sender =="LEG건우") {
+    if (msg == "ㅂㅊㅎㅅㅇ") {
+    replier.reply("번창하세요");
+    }
+  }
 
-
+/*
 try {
 
-if (msg.startsWith(".관리자위임 ")) {
+if (msg.startsWith(".관리자위임 ")
+    && ((sender == "ᴳᵉᵒⁿʷᵒᵒ ᴷⁱᵐ")||(sender == "LEG건우")) ) {
   NewMaster = Fs.read ("/sdcard/카유모/관리자목록").slice ("*");
-  
-  if (NewMaster.includes (sender) || sender == "김건우") {
+ 
+  if (NewMaster.includes (sender) || sender == "ᴳᵉᵒⁿʷᵒᵒ ᴷⁱᵐ") {
   replier.reply ("["+msg.substr (7)+"] 님을 관리자 목록에 추가합니다.");
   Fs.append ("/sdcard/카유모/관리자목록", msg.substr (7) + "*");
   }
 }
-if (msg == ".관리자초기화" && sender == "김건우") {
+if (msg == ".관리자초기화" && (sender == "ᴳᵉᵒⁿʷᵒᵒ ᴷⁱᵐ")||(sender == "LEG건우")) {
   Fs.write ("/sdcard/카유모/관리자목록", "[관리자]_에티선생*");
 }
 } catch (e) {
   replier.reply (e);
-}
+*/
 if (msg == ".봇") replier.reply ("닉네임 확인봇에 관한 정보입니다" + allsee
   +"\n\n\n[설명]"+"\n카트라이더 유저의 닉네임과 가장 최근의 매치기록을 알려주는 봇입니다. 이 외에도 다양한 기능이 있습니다."
-  +"\n\n[명령어 목록]" + "\n.유저 닉네임 ex).유저 에티선생\n.매치 닉네임 ex).매치 에티선생\n.관리자위임 카톡닉네임 ex).관리자위임 [관리자]_에티선생"
-  +"\n\n[봇 사용 가능자]\n" +
-  Fs.read ("/sdcard/카유모/관리자목록").split("*").join ("\n")
-  +"\n\n[직접 사용해보고싶다면?]" + "\n제 오픈프로필을 눌러 개인적으로 사용해보실 수 있습니다."
-  +"\n\n[봇 관련 문의]\n오픈채팅방 [LEG건우 / 18남 / 편집¤코딩]");
-  NewMaster = Fs.read ("/sdcard/카유모/관리자목록").slice ("*");
-if ((room == "(PC)카트라이더 유저들의 모임🔊" && NewMaster.includes (sender))
+  +"\n\n[명령어 목록]" + "\n.유저 닉네임 ex).유저 에티선생\n.매치 닉네임 ex).매치 에티선생"
+  +"\n\n[봇 사용 가능자]\n" + NewMaster.join("\n")
+  +"\n\n[봇 관련 문의]\n오픈채팅방 [LEG건우]");
+ 
+if ((room == "(PC)카트라이더 유저들의 모임🔊" &&
+(NewMaster.includes (sender))||(sender == "LEG건우"))
   || room != "(PC)카트라이더 유저들의 모임🔊") {
-
 
 if (msg.startsWith(".유저 ")) {
      try {
@@ -45,75 +61,77 @@ if (msg.startsWith(".유저 ")) {
     .header ("Authorization", Key).data ("nickname", User)
     .ignoreContentType(true).get().text();
     data3 = JSON.parse(data3);
-    
+   
      replier.reply (
      "유저 고유 Id: " + data3 ["accessId"]
      + "\n게임 닉네임: " + data3 ["name"]
      + "\n레벨: " + data3 ["level"]);
    } catch (e) {
-     replier.reply("존재하지 않는 라이더 이름입니다." + "\n\n주의: 최근에 닉네임을 변경하셨거나 복귀하신 이력이 있다면 인식이 되지 않을 수 있습니다.");
+     replier.reply("존재하지 않는 라이더 이름입니다.\n검색할 수 없는 이유는? -> [.이유]");
    }
+  }
+  if (msg == ".이유") {
+    replier.reply("[닉네임이 검색되지 않는 경우]\n\n1. 존재하지 않는 유저일 때\n2. 닉네임이 변경되었을 때\n3. 오랫동안 접속하지 않은 복귀유저일 때");
   }
 
 //매치데이터
 
 if (msg.startsWith(".매치 ")) {
-  
+ 
   try {
     let userId = Jsoup.connect ("https://api.nexon.co.kr/kart/v1.0/users/nickname/" + msg.substr(4))
     .header ("Authorization", Key).data ("nickname", msg.substr (4))
     .ignoreContentType(true).get().text();
-    
+   
     let matchData = Jsoup.connect (
     "https://api.nexon.co.kr/kart/v1.0/users/"
     + JSON.parse (userId)["accessId"] +
     "/matches?start_date=&end_date=&offset=&limit=1&match_types=")
     .header ("Authorization", Key).ignoreContentType(true).get().text();
-    
+   
     try {
     let Final = Jsoup.connect(
     "https://api.nexon.co.kr/kart/v1.0/matches/"
     + JSON.parse (matchData).matches[0].matches[0].matchId)
     .header ("Authorization", Key).ignoreContentType(true).get().text();
-    
+   
     var a = [];
     for (i=0; i<JSON.parse (Final)["players"].length; i++) {
-      
+     
       a.push (JSON.parse (Final).players[i].characterName);
       //replier.reply (JSON.parse (Final).players[i].characterName);
     }
     replier.reply ("[개인전] 참여선수목록\n\n" + a.join ("\n"));
     a = [];
     replier.reply (a);
-    
+   
   } catch (e1) {
     let Final = Jsoup.connect(
     "https://api.nexon.co.kr/kart/v1.0/matches/"
     + JSON.parse (matchData).matches[0].matches[0].matchId)
     .header ("Authorization", Key).ignoreContentType(true).get().text();
-    
+   
     a = [];
     for (i=0; i<JSON.parse (Final).teams[0].players.length; i++) {
       a.push (JSON.parse (Final).teams[0].players[i].characterName);
     }
     a.push ("vs");
-    
+   
     for (i=0; i<JSON.parse (Final).teams[0].players.length; i++) {
       a.push (JSON.parse (Final).teams[1].players[i].characterName);
     }
     replier.reply ("[팀전] 참여선수목록\n\n" + a.join ("\n"));
     a = [];
-    
+   
   }
 
   } catch (e) {
     replier.reply ("기록이 존재하지 않습니다.");
   }
 
-
 }
-  
-  
-  
+ 
+ 
+ 
 }
 }
