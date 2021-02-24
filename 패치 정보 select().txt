@@ -1,0 +1,11 @@
+var a =
+	Js.connect("https://kart.nexon.com/Kart/News/Patch/List.aspx").get()
+	.select("#kart_main_sections > section.board > div > div.list_tb.tb_notice > table > tbody > tr:nth-child(1) > td:nth-child(1)") // 정보 테이블
+	.select("a").attr("hre") // 패치 바로가기 링크
+
+
+1번패치
+-> #kart_main_sections > section.board > div > div.list_tb.tb_notice > table > tbody > tr:nth-child(1)
+
+2번패치
+-> #kart_main_sections > section.board > div > div.list_tb.tb_notice > table > tbody > tr:nth-child(2)
