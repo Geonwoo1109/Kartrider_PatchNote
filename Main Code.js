@@ -2,22 +2,25 @@ const scriptName = "카트패치내용";
 
 const allsee = "\u200d".repeat(500);
 
+//카트 - 사이트 jsoup파싱
 const Js = org.jsoup.Jsoup;
-const MainUrl = Js.connect("https://kart.nexon.com/Kart/News/Patch/List.aspx").get() .select("#kart_main_sections > section.board > div > div.list_tb.tb_notice > table > tbody");
 
 const n = "\n";
 const nn = "\n".repeat(2);
 
+
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
-  try {
-    if (msg == ".패치노트") {
-      var main = new Date();
-      var Y = String(main.getFullYear());
-      var M = String(main.getMonth()+1);
+  
+    if (msg == ".패치노트 카트") {
+        
+      var date = new Date();
+      var Y = String(date.getFullYear());
+      var M = String(date.getMonth()+1);
       if (M.length == 1) M = "0" + M;
-      var D = String(main.getDate());
+      var D = String(date.getDate());
       if (D.length == 1) D = "0" + D;
       
+        var MainUrl = Js.connect("https://kart.nexon.com/Kart/News/Patch/List.aspx").get() .select("#kart_main_sections > section.board > div > div.list_tb.tb_notice > table > tbody");
       var Final = [];
       for (i=1; i<11; i++) {
         var site = MainUrl.select("tr:nth-child("+i+")");
@@ -33,11 +36,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
         "("+Y+"."+M+"."+D+") 기준   "+allsee+nn+
         Final.join(nn));
       Final = [];
-    }
-  } catch (e) {replier.reply(e+e.lineNumber);}
+  }
     
-     
-  
-  
-
 }
+  
